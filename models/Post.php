@@ -31,7 +31,8 @@ class Post
             p.created_at 
             FROM posts p
             LEFT JOIN categories c 
-            ON c.id = p.category_id';
+            ON c.id = p.category_id
+            ORDER BY p.created_at DESC';
     //Preparing Query
     $stmt = $this->conn->prepare($query);
 
@@ -40,4 +41,43 @@ class Post
 
     return $stmt;
   }
+  public function read_one(){
+    // Preparing Query..
+    $query = ' SELECT 
+            c.name as category_name,
+            p.id,
+            p.category_id,
+            p.title,
+            p.body,
+            p.author,
+            p.created_at 
+            FROM posts p
+            LEFT JOIN categories c 
+            ON c.id = p.category_id
+            WHERE 
+            p.id =?
+            LIMIT 0,1
+            ';
+            //Preparing Query
+    $stmt = $this->conn->prepare($query);
+
+    //Binding the parameter (ID)
+    $stmt->bindParam(1, $this->id);
+
+    //Execute query
+    $stmt->execute();
+    
+    // Fetching all values
+
+    $row =  $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Setting Properties
+
+    $this->title = $row['title'];
+    $this->category_id = $row['category_id'];
+    $this->category_name = $row['category_name'];
+    $this->author = $row['author'];
+    $this->body = $row['body'];
+    $this->created_at = $row['created_at'];
+    }
 }

@@ -28,7 +28,8 @@ if($num >0){
             "category name" => $category_name,
             "title" => $title,
             "author"  => $author,
-            "body"=> $body
+            "body"=> substr($body,0,100)."...",
+            "Time-Stamp"=> $created_at
         );
        // Push to 'data'
         array_push($posts_arr['data'],$post_item);
