@@ -80,4 +80,38 @@ class Post
     $this->body = $row['body'];
     $this->created_at = $row['created_at'];
     }
+
+    // Inserting the post data
+    public function create(){
+       // Preparing Query..
+    $query = ' INSERT INTO posts
+    SET 
+      title = :title,
+      body = :body,
+      author = :author,
+      category_id = :category_id
+    ';
+    //Preparing Query
+    $stmt = $this->conn->prepare($query);
+
+    //Clean data
+    $this->title = htmlspecialchars(strip_tags($this->title));
+    $this->body = htmlspecialchars(strip_tags($this->body));
+    $this->author = htmlspecialchars(strip_tags($this->author));
+    $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+
+    // Bind Data
+    $stmt->bindParam(':title',$this->title);
+    $stmt->bindParam(':body',$this->body);
+    $stmt->bindParam(':author',$this->author);
+    $stmt->bindParam(':category_id',$this->category_id);
+    
+    //Execute Query
+    if($stmt->execute()){
+      return true;
+    }
+    // Print error if something goes wrong
+    printf("Error: %s.\n",$stmt->error);
+    return false;
+    }
 }
