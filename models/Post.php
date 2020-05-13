@@ -162,4 +162,30 @@ class Post
     printf("Error: %s.\n", $stmt->error);
     return false;
   }
+
+  // Deleting Post
+  public function delete()
+  {
+    // Preparing Query..
+    $query = ' DELETE  FROM posts WHERE id = :id';
+    //Preparing Query
+    $stmt = $this->conn->prepare($query);
+
+    //Clean data
+    $this->id = htmlspecialchars(strip_tags($this->id));
+
+    // Bind Data
+    try {
+      $stmt->bindParam(':id', $this->id);
+    } catch (PDOException $e) {
+    }
+
+    //Execute Query
+    if ($stmt->execute()) {
+      return true;
+    }
+    // Print error if something goes wrong
+    printf("Error: %s.\n", $stmt->error);
+    return false;
+  }
 }
