@@ -27,4 +27,3 @@ else{
     echo json_encode( array('message' => "No data found"));
 
 }
-?>

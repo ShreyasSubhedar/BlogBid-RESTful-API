@@ -7,28 +7,24 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 
 // Including blog post object
 include_once '../../config/Database.php';
-include_once '../../models/Post.php';
+include_once '../../models/Categories.php';
 // Database connection
 $database = new Database();
 $db = $database->connect();
 
-// Creating post object
-$post = new Post($db);
+// Creating category object
+$category = new Categories($db);
 
 // Get the raw posted Data
 
 $data = json_decode(file_get_contents("php://input"));
-if ($data->title != null) {
-
-    $post->title = $data->title;
-    $post->body = $data->body;
-    $post->author = $data->author;
-    $post->category_id = $data->category_id;
+if ($category->name != null) {
+    $category->name = $data->name;
 
 
-    // Create Post
-    if ($post->create()) {
-        echo json_encode(array('message' => 'Post Creted'));
+    // Create category
+    if ($category->create()) {
+        echo json_encode(array('message' => 'Category Creted'));
     }
 } else {
     http_response_code(500);

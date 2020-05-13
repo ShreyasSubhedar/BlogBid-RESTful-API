@@ -85,7 +85,7 @@ class Post
   }
 
   // Update the Post's data 
-    public function update()
+  public function update()
   {
     // Preparing Query..
     $query = ' UPDATE posts
@@ -125,7 +125,7 @@ class Post
     return false;
   }
 
- // Inserting the post data
+  // Inserting the post data
   public function create()
   {
     // Preparing Query..
