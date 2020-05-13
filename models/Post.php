@@ -19,6 +19,7 @@ class Post
   {
     $this->conn = $DB;
   }
+  // Read all 
   public function read()
   {
     $query = ' SELECT 
@@ -41,7 +42,9 @@ class Post
 
     return $stmt;
   }
-  public function read_one(){
+  // Read by ID
+  public function read_one()
+  {
     // Preparing Query..
     $query = ' SELECT 
             c.name as category_name,
@@ -58,7 +61,7 @@ class Post
             p.id =?
             LIMIT 0,1
             ';
-            //Preparing Query
+    //Preparing Query
     $stmt = $this->conn->prepare($query);
 
     //Binding the parameter (ID)
@@ -66,7 +69,7 @@ class Post
 
     //Execute query
     $stmt->execute();
-    
+
     // Fetching all values
 
     $row =  $stmt->fetch(PDO::FETCH_ASSOC);
@@ -79,17 +82,59 @@ class Post
     $this->author = $row['author'];
     $this->body = $row['body'];
     $this->created_at = $row['created_at'];
+  }
+
+  // Update the Post's data 
+    public function update()
+  {
+    // Preparing Query..
+    $query = ' UPDATE posts
+    SET 
+   title = :title,
+   body = :body,
+   author = :author,
+   category_id = :category_id
+   WHERE id = :id
+    ';
+    //Preparing Query
+    $stmt = $this->conn->prepare($query);
+
+    //Clean data
+    $this->title = htmlspecialchars(strip_tags($this->title));
+    $this->body = htmlspecialchars(strip_tags($this->body));
+    $this->author = htmlspecialchars(strip_tags($this->author));
+    $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+    $this->id = htmlspecialchars(strip_tags($this->id));
+
+    // Bind Data
+    try {
+      $stmt->bindParam(':title', $this->title);
+      $stmt->bindParam(':body', $this->body);
+      $stmt->bindParam(':author', $this->author);
+      $stmt->bindParam(':category_id', $this->category_id);
+      $stmt->bindParam(':id', $this->id);
+    } catch (PDOException $e) {
     }
 
-    // Inserting the post data
-    public function create(){
-       // Preparing Query..
+    //Execute Query
+    if ($stmt->execute()) {
+      return true;
+    }
+    // Print error if something goes wrong
+    printf("Error: %s.\n", $stmt->error);
+    return false;
+  }
+
+ // Inserting the post data
+  public function create()
+  {
+    // Preparing Query..
     $query = ' INSERT INTO posts
     SET 
-      title = :title,
-      body = :body,
-      author = :author,
-      category_id = :category_id
+    title = :title,
+    body = :body,
+    author = :author,
+    category_id = :category_id
     ';
     //Preparing Query
     $stmt = $this->conn->prepare($query);
@@ -101,17 +146,20 @@ class Post
     $this->category_id = htmlspecialchars(strip_tags($this->category_id));
 
     // Bind Data
-    $stmt->bindParam(':title',$this->title);
-    $stmt->bindParam(':body',$this->body);
-    $stmt->bindParam(':author',$this->author);
-    $stmt->bindParam(':category_id',$this->category_id);
-    
+    try {
+      $stmt->bindParam(':title', $this->title);
+      $stmt->bindParam(':body', $this->body);
+      $stmt->bindParam(':author', $this->author);
+      $stmt->bindParam(':category_id', $this->category_id);
+    } catch (PDOException $e) {
+    }
+
     //Execute Query
-    if($stmt->execute()){
+    if ($stmt->execute()) {
       return true;
     }
     // Print error if something goes wrong
-    printf("Error: %s.\n",$stmt->error);
+    printf("Error: %s.\n", $stmt->error);
     return false;
-    }
+  }
 }
