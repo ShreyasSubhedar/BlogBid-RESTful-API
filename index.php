@@ -167,7 +167,7 @@
                 </h5>
                 <p class="info-text">
                     The BlogBid is a content management system (CMS) designed for maintaining creative blogs and their respected categories<br>
-                    To use the site more efficent, I design a public RESTful API which helps to enhance the scope of BlogBid!!!> <br>
+                    To use the site more efficently & add various platform availability, I design a public RESTful API which helps to enhance the scope of BlogBid!!!> <br>
                     Make a pull request to contribute and raise issues to make the API more stronger and light-weight.<br>
                   
                 </p>
